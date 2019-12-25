@@ -1,0 +1,35 @@
+server:
+  servlet:
+    context-path: /servicecustomer
+  port: 9010
+spring:
+  application:
+    name: servicecustomer
+  cloud:
+    loadbalancer:
+      retry:
+        #开启ribbon的重试机制，默认是开启
+        enabled: true
+eureka:
+  instance:
+    instance-id: servicecustomer01
+    prefer-ip-address: true
+    metadata-map:
+      zone: zone-1
+  client:
+    prefer-same-zone-eureka: true
+    region: guangzhou
+    availability-zones:
+      guangzhou: zone-1,zone-2
+    service-url:
+      #必须要注册到多个注册中心，不然其中一个挂掉，心跳无法接收
+      #defaultZone: http://localhost:8080/eureka01/eureka/,http://localhost:8081/eureka02/eureka/
+      zone-1: http://localhost:8080/eureka01/eureka/
+      zone-2: http://localhost:8081/eureka02/eureka/
+    #服务清单缓存刷新时间，默认30秒
+    registry-fetch-interval-seconds: 10
+feign:
+  hystrix:
+    #开启feign支持熔断
+    enabled: true
+
